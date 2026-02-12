@@ -1,4 +1,4 @@
-from psyflow import StimUnit
+﻿from psyflow import StimUnit
 from functools import partial
 
 def run_trial(
@@ -7,7 +7,7 @@ def run_trial(
     settings,
     condition: str,
     stim_bank: dict,
-    trigger_sender=None,
+    trigger_runtime=None,
 ):
     """
     Runs a single trial of the Attention Network Test.
@@ -18,13 +18,13 @@ def run_trial(
         settings: The task settings object.
         condition (str): A string defining the current trial's type.
         stim_bank: The stimulus bank containing all visual stimuli.
-        trigger_sender: The object responsible for sending EEG/fMRI triggers.
+        trigger_runtime: The object responsible for sending EEG/fMRI triggers.
 
     Returns:
         dict: A dictionary containing all data recorded for this trial.
     """
     trial_data = {"condition": condition}
-    make_unit = partial(StimUnit, win=win, kb=kb, triggersender=trigger_sender)
+    make_unit = partial(StimUnit, win=win, kb=kb, runtime=trigger_runtime)
 
     # --- 1. Determine trial properties from condition string ---
     parts = condition.split('_')
@@ -115,3 +115,4 @@ def run_trial(
     make_unit(unit_label='iti').show(duration=settings.iti_duration).to_dict(trial_data)
 
     return trial_data
+
