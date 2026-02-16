@@ -1,4 +1,4 @@
-# config.yaml
+﻿# config.yaml
 # === Subject info ===
 subinfo_fields:
   - name: subject_id
@@ -47,12 +47,12 @@ window:
 # === Task-level settings ===
 task:
   task_name: "attention_network_test"
-  save_path: ./outputs/human
+  save_path: ./outputs/sim_sampler
   language: "Chinese"
   voice_name: "zh-CN-YunyangNeural"
-  total_blocks: 4
-  total_trials: 384 # 4 blocks * 96 trials/block
-  trial_per_block: 96 
+  total_blocks: 1
+  total_trials: 40
+  trial_per_block: 40
   conditions: [
     # No Cue
     'no_cue_congruent_up_left', 'no_cue_congruent_up_right', 'no_cue_incongruent_up_left', 'no_cue_incongruent_up_right',
@@ -74,7 +74,7 @@ task:
   left_key: f
   right_key: j
   delta: 0.0
-  voice_enabled: true
+  voice_enabled: false
   seed_mode: "same_across_sub"
 
 # === Stimuli ===
@@ -300,3 +300,22 @@ triggers:
 
   timing:
     post_delay_s: 0.001
+
+sim:
+  output_dir: outputs/sim_sampler
+  seed: 0
+  participant_id: sim001
+  session_id: sub-sim001_task-attention_network_test_sampler_seed0
+  log_path: outputs/sim_sampler/sub-sim001_task-attention_network_test_sampler_seed0_sim_events.jsonl
+  policy: warn
+  default_rt_s: 0.2
+  clamp_rt: false
+  responder:
+    type: responders.task_sampler:TaskSamplerResponder
+    kwargs:
+      key: space
+      hit_rate: 0.75
+      rt_mean_s: 0.35
+      rt_sd_s: 0.05
+      rt_min_s: 0.12
+
