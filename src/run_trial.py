@@ -2,7 +2,7 @@
 
 from psyflow import StimUnit, set_trial_context
 
-# trial stages in contract order: cue -> anticipation -> target -> feedback
+# trial stages use task-specific phase labels via set_trial_context(...)
 _TRIAL_COUNTER = 0
 
 
@@ -57,34 +57,34 @@ def run_trial(
         }
     )
 
-    # anticipation
+    # phase: pre_cue_fixation
     fix_unit = make_unit(unit_label="fixation").add_stim(stim_bank.get("fixation"))
     set_trial_context(
         fix_unit,
         trial_id=trial_id,
-        phase="anticipation",
+        phase="pre_cue_fixation",
         deadline_s=_deadline_s(settings.fixation_duration),
         valid_keys=list(settings.key_list),
         block_id=block_id,
         condition_id=str(condition),
-        task_factors={"condition": str(condition), "stage": "fixation", "block_idx": block_idx},
+        task_factors={"condition": str(condition), "stage": "pre_cue_fixation", "block_idx": block_idx},
         stim_id="fixation",
     )
     fix_unit.show(duration=settings.fixation_duration, onset_trigger=settings.triggers.get("fixation_onset")).to_dict(trial_data)
 
-    # cue
+    # phase: cue_signal
     if cue_type != "no_cue":
         if cue_type == "center_cue":
             cue_unit = make_unit(unit_label="cue").add_stim(stim_bank.get("cue_center"))
             set_trial_context(
                 cue_unit,
                 trial_id=trial_id,
-                phase="cue",
+                phase="cue_signal",
                 deadline_s=_deadline_s(settings.cue_duration),
                 valid_keys=list(settings.key_list),
                 block_id=block_id,
                 condition_id=str(condition),
-                task_factors={"condition": str(condition), "stage": "cue", "cue_type": cue_type, "block_idx": block_idx},
+                task_factors={"condition": str(condition), "stage": "cue_signal", "cue_type": cue_type, "block_idx": block_idx},
                 stim_id="cue_center",
             )
             cue_unit.show(duration=settings.cue_duration, onset_trigger=settings.triggers.get("center_cue_onset")).to_dict(trial_data)
@@ -93,12 +93,12 @@ def run_trial(
             set_trial_context(
                 cue_unit,
                 trial_id=trial_id,
-                phase="cue",
+                phase="cue_signal",
                 deadline_s=_deadline_s(settings.cue_duration),
                 valid_keys=list(settings.key_list),
                 block_id=block_id,
                 condition_id=str(condition),
-                task_factors={"condition": str(condition), "stage": "cue", "cue_type": cue_type, "block_idx": block_idx},
+                task_factors={"condition": str(condition), "stage": "cue_signal", "cue_type": cue_type, "block_idx": block_idx},
                 stim_id="cue_double",
             )
             cue_unit.show(duration=settings.cue_duration, onset_trigger=settings.triggers.get("double_cue_onset")).to_dict(trial_data)
@@ -109,12 +109,12 @@ def run_trial(
             set_trial_context(
                 cue_unit,
                 trial_id=trial_id,
-                phase="cue",
+                phase="cue_signal",
                 deadline_s=_deadline_s(settings.cue_duration),
                 valid_keys=list(settings.key_list),
                 block_id=block_id,
                 condition_id=str(condition),
-                task_factors={"condition": str(condition), "stage": "cue", "cue_type": cue_type, "block_idx": block_idx},
+                task_factors={"condition": str(condition), "stage": "cue_signal", "cue_type": cue_type, "block_idx": block_idx},
                 stim_id=cue_name,
             )
             cue_unit.show(
@@ -122,7 +122,7 @@ def run_trial(
                 onset_trigger=settings.triggers.get(f"spatial_cue_{cue_pos}_onset"),
             ).to_dict(trial_data)
 
-    # target
+    # phase: flanker_response
     stim_unit = make_unit(unit_label="stimulus").add_stim(stim_bank.get(stim_name))
 
     cue_code = {"no_cue": 1, "center_cue": 2, "double_cue": 3, "spatial_cue_up": 4, "spatial_cue_down": 4}[cue_type]
@@ -134,14 +134,14 @@ def run_trial(
     set_trial_context(
         stim_unit,
         trial_id=trial_id,
-        phase="target",
+        phase="flanker_response",
         deadline_s=_deadline_s(settings.stim_duration),
         valid_keys=list(settings.key_list),
         block_id=block_id,
         condition_id=str(condition),
         task_factors={
             "condition": str(condition),
-            "stage": "target",
+            "stage": "flanker_response",
             "cue_type": cue_type,
             "flanker_type": flanker_type,
             "target_position": target_position,
@@ -163,7 +163,7 @@ def run_trial(
     )
     stim_unit.to_dict(trial_data)
 
-    # feedback
+    # outcome display
     response = stim_unit.get_state("response", False)
     hit = stim_unit.get_state("hit", False)
 

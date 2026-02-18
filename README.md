@@ -48,6 +48,13 @@ The Attention Network Test (ANT) is a classic experimental paradigm used to asse
 | Feedback            | Display feedback (`Correct`, `Incorrect`, or `Too Slow`).                   |
 | ITI                 | A blank screen shown for a random duration before the next trial.           |
 
+### Runtime Context Phases
+| Phase Label | Meaning |
+|---|---|
+| `pre_cue_fixation` | pre cue fixation stage in `src/run_trial.py` responder context. |
+| `cue_signal` | cue signal stage in `src/run_trial.py` responder context. |
+| `flanker_response` | flanker response stage in `src/run_trial.py` responder context. |
+
 ## 3. Configuration Summary
 
 ### a. Subject Info
