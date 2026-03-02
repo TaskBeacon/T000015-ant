@@ -313,9 +313,13 @@ sim:
   responder:
     type: responders.task_sampler:TaskSamplerResponder
     kwargs:
-      key: space
-      hit_rate: 0.75
-      rt_mean_s: 0.35
+      left_key: f
+      right_key: j
+      p_correct_congruent: 0.90
+      p_correct_incongruent: 0.78
+      p_miss: 0.05
+      rt_congruent_mean_s: 0.42
+      rt_incongruent_mean_s: 0.50
       rt_sd_s: 0.05
       rt_min_s: 0.12
 

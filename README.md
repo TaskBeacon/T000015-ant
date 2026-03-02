@@ -1,173 +1,130 @@
 # Attention Network Test (ANT)
-![Maturity: smoke_tested](https://img.shields.io/badge/Maturity-smoke_tested-d97706?style=for-the-badge&labelColor=c2410c)
 
+![Maturity: smoke_tested](https://img.shields.io/badge/Maturity-smoke_tested-d97706?style=flat-square&labelColor=111827)
 
-| Field                | Value                                      |
-| -------------------- | ------------------------------------------ |
-| Name                 | Attention Network Test (ANT)               |
-| Version              | main (1.0)                                 |
-| URL / Repository     | https://github.com/TaskBeacon/ANT          |
-| Short Description    | A task measuring alerting, orienting, and executive control networks. |
-| Created By           | Zhipeng Cao (zhipeng30@foxmail.com)        |
-| Date Updated         | 2025/07/29                                 |
-| PsyFlow Version      | 0.1.0                                      |
-| PsychoPy Version     | 2025.1.1                                   |
-| Modality             | Behavior/EEG                               |
-| Language             | Chinese                                    |
-| Voice Name           | zh-CN-YunyangNeural                        |
+| Field | Value |
+|---|---|
+| Name | Attention Network Test (ANT) |
+| Version | v1.1.2 |
+| URL / Repository | https://github.com/TaskBeacon/T000015-ant |
+| Short Description | ANT implementation measuring alerting, orienting, and executive-control effects from cue and flanker manipulations. |
+| Created By | Zhipeng Cao (zhipeng30@foxmail.com) |
+| Date Updated | 2026-03-02 |
+| PsyFlow Version | 0.1.9 |
+| PsychoPy Version | 2025.1.1 |
+| Modality | Behavior / EEG |
+| Language | Chinese |
+| Voice Name | zh-CN-YunyangNeural |
+
+## Run Modes
+
+- Human (default): `python main.py`
+- QA: `python main.py qa --config config/config_qa.yaml`
+- Scripted Sim: `python main.py sim --config config/config_scripted_sim.yaml`
+- Sampler Sim: `python main.py sim --config config/config_sampler_sim.yaml`
 
 ## 1. Task Overview
 
-The Attention Network Test (ANT) is a classic experimental paradigm used to assess the efficiency of three distinct attentional networks: alerting, orienting, and executive control. Participants are presented with a central target stimulus (an arrow) flanked by other stimuli (arrows). They are instructed to respond to the direction of the central target while ignoring the flanking stimuli. The task measures how efficiently a participant can focus on a target and filter out distracting information, and how warning and spatial cues affect their performance.
+This ANT presents a target arrow flanked by congruent or incongruent arrows, with cue manipulations (`no`, `center`, `double`, `spatial`). Participants respond to the center arrow direction. The task enables estimation of alerting, orienting, and executive-control effects from reaction time and accuracy contrasts.
 
 ## 2. Task Flow
 
 ### Block-Level Flow
 
-| Step                       | Description                                                                 |
-| -------------------------- | --------------------------------------------------------------------------- |
-| Load Config                | Load task configuration from `config.yaml`.                                 |
-| Collect Subject Info       | Display a form to collect participant demographics.                         |
-| Setup Triggers             | Initialize the trigger sender for EEG/fMRI synchronization.                 |
-| Initialize Window/Input    | Create the PsychoPy window and keyboard handler.                            |
-| Load Stimuli               | Load all visual stimuli defined in the config using `StimBank`.             |
-| Show Instructions          | Present task instructions to the participant.                               |
-| Loop Over Blocks           | For each block: run trials, then compute and show block-level feedback.     |
-| Show Goodbye               | Display a final thank you message.                                          |
-| Save Data                  | Save all recorded trial data to a CSV file.                                 |
-| Close                      | Close the trigger port and quit PsychoPy.                                   |
+| Step | Description |
+|---|---|
+| Setup | Load config, initialize mode context (`human/qa/sim`), create window, preload stimuli, initialize triggers. |
+| Instruction | Show `instruction_text` (voice optional in human mode). |
+| Block Loop | Generate ANT conditions and run trial loop through `run_trial(...)`. |
+| Block Summary | Compute block accuracy and show `block_break`. |
+| Finalize | Show `good_bye`, send `exp_end`, save CSV, close trigger runtime, quit PsychoPy. |
 
 ### Trial-Level Flow
 
-| Step                | Description                                                                 |
-| ------------------- | --------------------------------------------------------------------------- |
-| Fixation            | Show a central fixation cross `(+)`.                                        |
-| Cue (Optional)      | A cue may appear to alert the participant (center cue), direct their attention (spatial cue), or both (double cue). |
-| Stimulus            | Present the Flanker stimulus (e.g., `>>><>>`) at either the top or bottom of the screen. |
-| Response            | Record the participant's key press (`left` or `right`).                     |
-| Feedback            | Display feedback (`Correct`, `Incorrect`, or `Too Slow`).                   |
-| ITI                 | A blank screen shown for a random duration before the next trial.           |
-
-### Runtime Context Phases
-| Phase Label | Meaning |
+| Step | Description |
 |---|---|
-| `pre_cue_fixation` | pre cue fixation stage in `src/run_trial.py` responder context. |
-| `cue_signal` | cue signal stage in `src/run_trial.py` responder context. |
-| `flanker_response` | flanker response stage in `src/run_trial.py` responder context. |
+| Fixation | Show fixation cross (`+`) for `fixation_duration`. |
+| Cue (optional) | Show center/double/spatial cue for `cue_duration` if condition requires it. |
+| Flanker Response | Show 5-arrow stimulus and capture left/right response during `stim_duration`. |
+| Feedback | Show correct/incorrect/no-response feedback text. |
+| ITI | Blank interval sampled from `iti_duration`. |
+
+### Controller Logic
+
+No adaptive controller is used in this ANT baseline variant.
 
 ## 3. Configuration Summary
 
 ### a. Subject Info
 
-| Field      | Meaning                    |
-| ---------- | -------------------------- |
-| subject_id | Unique participant ID (3 digits). |
-| subname    | Participant's name (Pinyin). |
-| age        | Participant's age.         |
-| gender     | Participant's gender.      |
+| Field | Meaning |
+|---|---|
+| `subject_id` | Participant ID (3 digits). |
+| `subname` | Participant name (pinyin). |
+| `age` | Age (5-60). |
+| `gender` | `Male` or `Female`. |
 
 ### b. Window Settings
 
-Standard PsychoPy window settings for fullscreen display.
+| Parameter | Value |
+|---|---|
+| `window.size` | `[1920, 1080]` |
+| `window.units` | `deg` |
+| `window.fullscreen` | `true` |
+| `window.bg_color` | `gray` |
+| `window.monitor_width_cm` | `60` |
+| `window.monitor_distance_cm` | `72` |
 
 ### c. Stimuli
 
-| Name                     | Type    | Description                                   |
-| ------------------------ | ------- | --------------------------------------------- |
-| fixation                 | text    | Central cross `+`.                            |
-| cue_up                   | text    | Cue `*` at the top of the screen.             |
-| cue_down                 | text    | Cue `*` at the bottom of the screen.          |
-| cue_center               | text    | Cue `*` at the center of the screen.          |
-| congruent_up_left        | text    | `<<<<<` at the top of the screen.             |
-| congruent_up_right       | text    | `>>>>>` at the top of the screen.             |
-| incongruent_up_left      | text    | `>><>>` at the top of the screen.             |
-| incongruent_up_right     | text    | `<<><<` at the top of the screen.             |
-| congruent_down_left      | text    | `<<<<<` at the bottom of the screen.          |
-| congruent_down_right     | text    | `>>>>>` at the bottom of the screen.          |
-| incongruent_down_left    | text    | `>><>>` at the bottom of the screen.          |
-| incongruent_down_right   | text    | `<<><<` at the bottom of the screen.          |
-| correct_feedback         | textbox | "正确" (Correct) in green.                    |
-| incorrect_feedback       | textbox | "错误" (Incorrect) in red.                    |
-| no_response_feedback     | textbox | "太慢" (Too Slow) in orange.                  |
-| instruction_text         | textbox | Instructions explaining the task.             |
-| block_break              | text    | Inter-block message showing accuracy and RT.  |
-| good_bye                 | text    | Final thank you message.                      |
+| Name | Type | Description |
+|---|---|---|
+| `fixation` | `text` | Central fixation cross. |
+| `cue_center` | `text` | Center cue (`*`). |
+| `cue_up`, `cue_down` | `text` | Spatial cues at upper/lower locations. |
+| `congruent_*` | `text` | Congruent 5-arrow arrays. |
+| `incongruent_*` | `text` | Incongruent 5-arrow arrays. |
+| `correct_feedback` | `text` | Correct response message. |
+| `incorrect_feedback` | `text` | Incorrect response message. |
+| `no_response_feedback` | `text` | Miss/no-response message. |
+| `instruction_text` | `textbox` | Chinese ANT instructions. |
+| `block_break` | `text` | Inter-block summary screen. |
+| `good_bye` | `text` | End-of-task message. |
 
 ### d. Timing
 
-| Phase                  | Duration (s)      | Config Variable   |
-| ---------------------- | ----------------- | ----------------- |
-| cue                    | 0.1               | cue_duration      |
-| fixation               | 0.5               | fixation_duration |
-| stimulus               | 1.0 (max response time) | stim_duration     |
-| feedback               | 0.5               | feedback_duration |
-| iti                    | random 0.8–1.2    | iti_duration      |
+| Phase | Duration |
+|---|---|
+| `cue_duration` | `0.1 s` |
+| `fixation_duration` | `0.5 s` |
+| `stim_duration` | `1.0 s` |
+| `feedback_duration` | `0.5 s` |
+| `iti_duration` | Random in `[0.8, 1.2] s` |
 
 ### e. Triggers
 
-| Event                           | Code  |
-| ------------------------------- | ----- |
-| exp_onset                       | 254   |
-| exp_end                         | 255   |
-| block_onset                     | 252   |
-| block_end                       | 253   |
-| fixation_onset                  | 1     |
-| center_cue_onset                | 11    |
-| double_cue_onset                | 12    |
-| spatial_cue_up_onset            | 13    |
-| spatial_cue_down_onset          | 14    |
-| stim_1111                       | 21    |
-| stim_1112                       | 22    |
-| stim_1121                       | 23    |
-| stim_1122                       | 24    |
-| stim_1211                       | 25    |
-| stim_1212                       | 26    |
-| stim_1221                       | 27    |
-| stim_1222                       | 28    |
-| stim_2111                       | 31    |
-| stim_2112                       | 32    |
-| stim_2121                       | 33    |
-| stim_2122                       | 34    |
-| stim_2211                       | 35    |
-| stim_2212                       | 36    |
-| stim_2221                       | 37    |
-| stim_2222                       | 38    |
-| stim_3111                       | 41    |
-| stim_3112                       | 42    |
-| stim_3121                       | 43    |
-| stim_3122                       | 44    |
-| stim_3211                       | 45    |
-| stim_3212                       | 46    |
-| stim_3221                       | 47    |
-| stim_3222                       | 48    |
-| stim_4111                       | 51    |
-| stim_4112                       | 52    |
-| stim_4121                       | 53    |
-| stim_4122                       | 54    |
-| stim_4211                       | 55    |
-| stim_4212                       | 56    |
-| stim_4221                       | 57    |
-| stim_4222                       | 58    |
-| left_key_press                  | 201   |
-| right_key_press                 | 202   |
-| feedback_correct_response       | 221   |
-| feedback_incorrect_response     | 222   |
-| feedback_no_response            | 223   |
-| feedback_onset                  | 230   |
+| Event | Code |
+|---|---:|
+| `exp_onset` | 254 |
+| `exp_end` | 255 |
+| `block_onset` | 252 |
+| `block_end` | 253 |
+| `fixation_onset` | 1 |
+| `center_cue_onset` | 11 |
+| `double_cue_onset` | 12 |
+| `spatial_cue_up_onset` | 13 |
+| `spatial_cue_down_onset` | 14 |
+| `stim_1111` ... `stim_4222` | 21-58 family |
+| `left_key_press` | 201 |
+| `right_key_press` | 202 |
+| `feedback_correct_response` | 221 |
+| `feedback_incorrect_response` | 222 |
+| `feedback_no_response` | 223 |
 
 ## 4. Methods (for academic publication)
 
-In this experiment, participants performed an Attention Network Test (ANT) to assess the efficiency of three attentional networks: alerting, orienting, and executive control. Each trial began with a central fixation cross, displayed for 500 ms. On some trials, a cue was presented for 100ms prior to the target. This cue could be a central cue (an asterisk at fixation), a double cue (asterisks at both possible target locations), a spatial cue (an asterisk at the location of the upcoming target), or no cue. Subsequently, a row of five arrows was presented at either the top or bottom of the screen for up to 1000 ms or until a response was made. Participants were instructed to respond to the direction of the central arrow while ignoring the flanking arrows by pressing the 'f' key for a left-pointing central arrow or the 'j' key for a right-pointing central arrow. Following their response, feedback was provided for 500 ms, indicating whether the response was correct, incorrect, or too slow.
+Participants completed an Attention Network Test combining cue manipulations with flanker congruency conflict. Each trial began with fixation, followed by an optional cue (none, center, double, or spatial), and then a five-arrow target array in which the central arrow defined the required response.
 
-The task included two types of stimuli: congruent trials, where all arrows pointed in the same direction (e.g., '>>>>>' or '<<<<<'), and incongruent trials, where the flanking arrows pointed in the opposite direction from the central target arrow (e.g., '>><>>' or '<<><<'). These conditions were presented in a randomized order within each block. The task was structured into 4 blocks of 96 trials each (total 384 trials), with equal numbers of each condition. After each block, participants received feedback on their accuracy and were given the opportunity to rest before continuing to the next block. The inter-trial interval varied randomly between 800 and 1200 ms to prevent anticipatory responses.
+Participants responded to center-arrow direction while ignoring flankers. Congruent and incongruent flankers were used to quantify executive-control costs, while cue contrasts enabled alerting and orienting effect estimates. Feedback and jittered inter-trial intervals were included to stabilize performance and timing.
 
-This design allows for the examination of the three attentional networks by calculating the following subtractions in reaction time: 
-
-*   **Alerting Effect:** No Cue RT - Double Cue RT
-*   **Orienting Effect:** Center Cue RT - Spatial Cue RT
-*   **Executive Control Effect (Flanker Effect):** Incongruent RT - Congruent RT
-
-## 5. References
-
-1.  Fan, J., McCandliss, B. D., Sommer, T., Raz, a., & Posner, M. I. (2002). Testing the efficiency and independence of attentional networks. *Journal of Cognitive Neuroscience*, 14(3), 340-347.
-2.  Eriksen, B. A., & Eriksen, C. W. (1974). Effects of noise letters upon the identification of a target letter in a nonsearch task. *Perception & Psychophysics*, 16(1), 143-149.
+The implementation is EEG-compatible and includes explicit event markers for fixation, cue class, condition-encoded target onset, response channel, and outcome.

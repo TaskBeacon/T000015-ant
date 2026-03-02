@@ -1,36 +1,44 @@
-﻿# CHANGELOG
+# CHANGELOG
 
-All notable development changes for T000015-ant are documented here.
+All notable development changes for `T000015-ant` are documented here.
 
-## [Unreleased]
+## [1.1.2] - 2026-03-02
+
+### Added
+- Added full reference artifact bundle under `references/`:
+  - `references.yaml`
+  - `references.md`
+  - `parameter_mapping.md`
+  - `stimulus_mapping.md`
+  - `task_logic_audit.md`
+- Added ANT-specific simulation responder behavior in `responders/task_sampler.py`.
 
 ### Changed
-- Refactored `src/run_trial.py` to use `psyflow`'s native `next_trial_id()` and removed legacy internal `_next_trial_id` and `_deadline_s` boilerplate.
+- Updated `main.py` finalize flow so goodbye no longer terminates before save/close.
+- Updated voice conversion call to list-based API (`["instruction_text"]`).
+- Updated `config/config_scripted_sim.yaml` scripted responder key to valid task key (`f`).
+- Updated `config/config_sampler_sim.yaml` to ANT-specific sampler kwargs.
+- Updated `responders/__init__.py` to export `TaskSamplerResponder`.
+- Rewrote `README.md` to current contract structure and added `### Controller Logic`.
+- Updated `taskbeacon.yaml` release tag, evidence list, and maintainer metadata.
 
 ## [1.1.1] - 2026-02-18
-- Refactored responder context phase names in `src/run_trial.py` to task-specific labels (removed generic MID-style phase naming).
-- Updated stage comments in `src/run_trial.py` to phase-aligned labels for cleaner auditability.
-- Updated `README.md` to keep runtime phase documentation aligned with the implemented trial context phases.
+
+### Changed
+- Refactored responder context phase names in `src/run_trial.py` to task-specific labels.
+- Updated stage comments in `src/run_trial.py` for cleaner auditability.
 
 ### Fixed
-- Removed legacy stage comment patterns (`cue/anticipation/target/feedback`) from trial runtime code.
+- Removed legacy generic stage comment patterns from runtime trial code.
 
 ## [1.1.0] - 2026-02-17
 
 ### Added
-- Added mode-aware main.py flow for human, qa, and sim modes.
-- Added split runtime configs: config/config.yaml, config/config_qa.yaml, config/config_scripted_sim.yaml, and config/config_sampler_sim.yaml.
-- Added task-local responder scaffold in 
-esponders/task_sampler.py.
-- Added outputs/.gitkeep and standardized output folders for human/qa/sim runs.
+- Added mode-aware main flow for `human`, `qa`, and `sim`.
+- Added split runtime configs for qa/scripted sim/sampler sim.
+- Added task-local responder scaffold in `responders/task_sampler.py`.
+- Added output scaffolding (`outputs/.gitkeep`) and standardized `.gitignore` rules.
 
 ### Changed
-- Aligned trigger config to structured schema (	riggers.map, 	riggers.driver, 	riggers.policy, 	riggers.timing).
-- Aligned src/run_trial.py to set responder trial context via set_trial_context(...) at response windows.
-- Added/updated 	askbeacon.yaml with contracts.psyflow_taps: v0.1.0.
-- Updated .gitignore to match standardized task artifacts and output handling.
-
-### Verified
-- psyflow-validate <task> passes all contract checks (including artifacts).
-- psyflow-qa <task> --config config/config_qa.yaml --no-maturity-update passes.
-- python main.py sim --config config/config_scripted_sim.yaml runs successfully and writes sim outputs.
+- Aligned trigger config to structured schema (`triggers.map`, `triggers.driver`, `triggers.policy`, `triggers.timing`).
+- Added responder context injection via `set_trial_context(...)` in trial runtime.

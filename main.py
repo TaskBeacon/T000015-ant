@@ -76,7 +76,7 @@ def run(options: TaskRunOptions):
 
         stim_bank = StimBank(win, cfg["stim_config"])
         if bool(getattr(settings, "voice_enabled", True)) and options.mode not in ("qa", "sim"):
-            stim_bank = stim_bank.convert_to_voice("instruction_text", voice=settings.voice_name)
+            stim_bank = stim_bank.convert_to_voice(["instruction_text"], voice=settings.voice_name)
         stim_bank = stim_bank.preload_all()
 
         settings.save_to_json()
@@ -126,9 +126,7 @@ def run(options: TaskRunOptions):
                 )
             ).wait_and_continue()
 
-        StimUnit("goodbye", win, kb, runtime=trigger_runtime).add_stim(stim_bank.get("good_bye")).wait_and_continue(
-            terminate=True
-        )
+        StimUnit("goodbye", win, kb, runtime=trigger_runtime).add_stim(stim_bank.get("good_bye")).wait_and_continue()
 
         trigger_runtime.send(settings.triggers.get("exp_end"))
 

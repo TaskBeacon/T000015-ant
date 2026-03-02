@@ -1,4 +1,4 @@
-﻿from functools import partial
+from functools import partial
 
 from psyflow import StimUnit, set_trial_context, next_trial_id
 

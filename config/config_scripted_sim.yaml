@@ -313,6 +313,6 @@ sim:
   responder:
     type: scripted
     kwargs:
-      key: space
+      key: f
       rt_s: 0.35
 

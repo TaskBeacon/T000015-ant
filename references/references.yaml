@@ -1,0 +1,56 @@
+task_id: T000015
+generated_at: "2026-03-02T21:45:00Z"
+selection_policy: canonical_ant_core_plus_attention_network_theory
+citation_threshold: 100
+papers:
+  - id: FAN2002
+    title: "Testing the efficiency and independence of attentional networks"
+    year: 2002
+    journal: Journal of Cognitive Neuroscience
+    doi_or_url: https://doi.org/10.1162/089892902317361886
+    citation_count: 5000
+    open_access: false
+    is_high_impact: false
+    used_for:
+      - ant_trial_structure
+      - cue_conditions
+      - attentional_network_metrics
+
+  - id: ERIKSEN1974
+    title: "Effects of noise letters upon the identification of a target letter in a nonsearch task"
+    year: 1974
+    journal: Perception and Psychophysics
+    doi_or_url: https://doi.org/10.3758/BF03203267
+    citation_count: 4500
+    open_access: false
+    is_high_impact: false
+    used_for:
+      - flanker_congruency_logic
+      - conflict_manipulation
+      - response_competition
+
+  - id: POSNER1990
+    title: "The attention system of the human brain"
+    year: 1990
+    journal: Annual Review of Neuroscience
+    doi_or_url: https://doi.org/10.1146/annurev.ne.13.030190.001145
+    citation_count: 10000
+    open_access: false
+    is_high_impact: true
+    used_for:
+      - alerting_orienting_executive_framework
+      - attentional_network_theory
+      - ant_construct_mapping
+
+  - id: FAN2005
+    title: "The activation of attentional networks"
+    year: 2005
+    journal: NeuroImage
+    doi_or_url: https://doi.org/10.1016/j.neuroimage.2004.11.019
+    citation_count: 1800
+    open_access: false
+    is_high_impact: false
+    used_for:
+      - cue_and_target_timing_constraints
+      - network_effect_computation_context
+      - eeg_fmri_event_interpretation
