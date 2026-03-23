@@ -3,7 +3,8 @@
 ## 结论
 
 已按 `task-plot` 从头重绘 `T000010-rest` 的任务流程图，输出已放在 `benchmark/runs/task_plot_redo/T000010-rest/` 下。
-- 本地提交：`d75e73f`
+- 流程图提交：`d75e73f`
+- 最终头提交：`52a7df0`
 - 远程分支：`t000010/codex/task-plot-redo-T000010-rest`
 - 远程 PR：`https://github.com/TaskBeacon/T000010-rest/pull/new/codex/task-plot-redo-T000010-rest`
 
