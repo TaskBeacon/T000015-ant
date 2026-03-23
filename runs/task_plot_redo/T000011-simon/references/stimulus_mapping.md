@@ -1,0 +1,13 @@
+# Stimulus Mapping
+
+## Mapping Table
+
+| Condition | Stage/Phase | Stimulus IDs | Participant-Facing Content | Source Paper ID | Evidence (quote/figure/table) | Implementation Mode | Asset References | Notes |
+|---|---|---|---|---|---|---|---|---|
+| `red_left` | `simon_response` | `red_left` | Red circle shown on the left; participant should press `f` by color rule. | `W2086897159` | Simon task conflict defined by mismatch/match between spatial location and response mapping. | `psychopy_builtin` | `config/*.yaml -> stimuli.red_left` | Incongruent for red (`left-key`) is congruent in this mapping. |
+| `red_right` | `simon_response` | `red_right` | Red circle shown on the right; participant should still press `f` by color rule. | `W2086897159` | Spatial incongruency drives conflict effect despite constant color rule. | `psychopy_builtin` | `config/*.yaml -> stimuli.red_right` | Incongruent condition. |
+| `blue_left` | `simon_response` | `blue_left` | Blue circle shown on the left; participant should press `j` by color rule. | `W2086897159` | Spatial incongruency drives conflict effect despite constant color rule. | `psychopy_builtin` | `config/*.yaml -> stimuli.blue_left` | Incongruent condition. |
+| `blue_right` | `simon_response` | `blue_right` | Blue circle shown on the right; participant should press `j` by color rule. | `W2086897159` | Simon conflict framework contrasts this congruent mapping with incongruent trials. | `psychopy_builtin` | `config/*.yaml -> stimuli.blue_right` | Congruent condition. |
+| `ALL` | `pre_stim_fixation` | `fixation` | Center fixation cross `+` before each trial stimulus. | `W2580218417` | Simon-type conflict tasks include a pre-target fixation stage. | `psychopy_builtin` | `config/*.yaml -> stimuli.fixation` | No response evaluation in fixation stage. |
+| `ALL` | `feedback` | `correct_feedback`, `incorrect_feedback`, `no_response_feedback` | Chinese feedback text: 正确 / 错误 / 未反应. | `W2580218417` | Outcome signals are used in control adaptation analyses. | `psychopy_builtin` | `config/*.yaml -> stimuli.*_feedback` | Feedback selected by runtime response outcome. |
+| `ALL` | `instruction_text` | `instruction_text` | Chinese instructions describing color-based response rule (`f` for red, `j` for blue). | `W2086897159` | Explicit rule instruction is required to dissociate relevant color from irrelevant location. | `psychopy_builtin` | `config/*.yaml -> stimuli.instruction_text` | Localization-ready via config text field. |

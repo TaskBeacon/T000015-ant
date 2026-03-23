@@ -1,0 +1,223 @@
+# ============================================================================
+# Base config (human run)
+# - Used by: python main.py
+# - Scope: human experiment only (no qa/sim section in this file)
+# ============================================================================
+
+# === Subject Form ===========================================================
+subinfo_fields:
+  - name: subject_id
+    type: int
+    constraints:
+      min: 101
+      max: 999
+      digits: 3
+  - name: subname
+    type: string
+  - name: age
+    type: int
+    constraints:
+      min: 5
+      max: 60
+  - name: gender
+    type: choice
+    choices:
+      - Male
+      - Female
+
+# === Subject Mapping ========================================================
+subinfo_mapping:
+  subject_id: 被试号
+  subname: 被试姓名(拼音)
+  age: 年龄
+  gender: 性别
+  Male: 男
+  Female: 女
+  registration_failed: 注册失败。
+  registration_successful: 注册成功！
+  invalid_input: 字段 {field} 输入无效
+
+# === Display / Window =======================================================
+window:
+  size:
+    - 1920
+    - 1080
+  units: deg
+  screen: 1
+  bg_color: gray
+  fullscreen: true
+  monitor_width_cm: 60
+  monitor_distance_cm: 72
+
+# === Task ===================================================================
+task:
+  task_name: simon_task
+  save_path: ./outputs/human
+  language: Chinese
+  voice_name: zh-CN-YunyangNeural
+  voice_enabled: true
+  total_blocks: 3
+  total_trials: 180
+  trial_per_block: 60
+  conditions:
+    - red_left
+    - red_right
+    - blue_left
+    - blue_right
+  key_list:
+    - f
+    - j
+  left_key: f
+  right_key: j
+  seed_mode: same_across_sub
+  delta: 0.0
+
+# === Stimuli ================================================================
+stimuli:
+  fixation:
+    type: text
+    text: "+"
+    color: white
+    height: 1.5
+
+  red_left:
+    type: circle
+    radius: 1.5
+    color: red
+    pos:
+      - -3
+      - 0
+
+  red_right:
+    type: circle
+    radius: 1.5
+    color: red
+    pos:
+      - 3
+      - 0
+
+  blue_left:
+    type: circle
+    radius: 1.5
+    color: blue
+    pos:
+      - -3
+      - 0
+
+  blue_right:
+    type: circle
+    radius: 1.5
+    color: blue
+    pos:
+      - 3
+      - 0
+
+  correct_feedback:
+    type: text
+    text: 正确
+    color: white
+    font: SimHei
+    height: 1.5
+
+  incorrect_feedback:
+    type: text
+    text: 错误
+    color: white
+    font: SimHei
+    height: 1.5
+
+  no_response_feedback:
+    type: text
+    text: 未反应
+    color: white
+    font: SimHei
+    height: 1.5
+
+  block_break:
+    type: text
+    text: |
+      第 {block_num} / {total_blocks} 部分完成
+      正确率：{accuracy:.2%}
+
+      请在充分休息后按【空格键】继续
+    color: white
+    font: SimHei
+    height: 1.2
+
+  instruction_text:
+    type: textbox
+    text: |
+      【Simon任务】
+
+      任务开始后，屏幕中央会显示一个“+”号，请注视它。
+      随后，屏幕左侧或右侧会出现一个彩色圆圈。
+
+      请根据圆圈的颜色尽快做出反应，忽略圆圈出现的位置。
+      如果圆圈是【红色】，请按【f】键。
+      如果圆圈是【蓝色】，请按【j】键。
+
+      准备好后，请按【空格键】开始。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+    units: deg
+    size:
+      - 20
+      - 5
+
+  good_bye:
+    type: textbox
+    text: |
+      实验结束，感谢您的参与！
+      请按【空格键】退出。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.9
+    units: deg
+    size:
+      - 20
+      - 5
+
+# === Timing =================================================================
+timing:
+  iti_duration:
+    - 0.8
+    - 1.2
+  fixation_duration: 0.5
+  stim_duration: 1.0
+  feedback_duration: 0.5
+
+# === Triggers ===============================================================
+triggers:
+  map:
+    exp_onset: 98
+    exp_end: 99
+    block_onset: 100
+    block_end: 101
+    fixation_onset: 1
+    stim_onset: 10
+    left_key_press: 30
+    right_key_press: 31
+    feedback_correct_response: 51
+    feedback_incorrect_response: 52
+    feedback_no_response: 53
+    feedback_onset: 60
+
+  driver:
+    type: serial_url
+    url: loop://
+    baudrate: 115200
+    timeout: 1
+    prefix:
+      - 1
+      - 225
+      - 1
+      - 0
+
+  policy:
+    strict: false
+
+  timing:
+    post_delay_s: 0.001

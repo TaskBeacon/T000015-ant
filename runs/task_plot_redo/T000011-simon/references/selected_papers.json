@@ -1,0 +1,66 @@
+[
+  {
+    "id": "W2086897159",
+    "title": "Pupil dilation in the Simon task as a marker of conflict processing",
+    "authors": [
+      "Henk van Steenbergen",
+      "Guido P. H. Band"
+    ],
+    "year": 2013,
+    "journal": "Frontiers in Human Neuroscience",
+    "doi_or_url": "https://doi.org/10.3389/fnhum.2013.00215",
+    "citation_count": 131,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "condition_congruency_rationale",
+      "conflict_effect_measurement"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2580218417",
+    "title": "Two Independent Frontal Midline Theta Oscillations during Conflict Detection and Adaptation in a Simon-Type Manual Reaching Task",
+    "authors": [
+      "Thomas Töllner",
+      "Yijun Wang",
+      "Scott Makeig",
+      "Hermann J. Müller",
+      "Tzyy‐Ping Jung",
+      "Klaus Gramann"
+    ],
+    "year": 2017,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.1752-16.2017",
+    "citation_count": 113,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "timing_and_conflict_processing",
+      "response_control_dynamics"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2132894889",
+    "title": "Inhibition of subliminally primed responses is mediated by the caudate and thalamus: evidence from functional MRI and Huntington's disease",
+    "authors": [
+      "Adam R. Aron"
+    ],
+    "year": 2003,
+    "journal": "Brain",
+    "doi_or_url": "https://doi.org/10.1093/brain/awg067",
+    "citation_count": 184,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "inhibitory_control_rationale",
+      "response_selection_framework"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  }
+]
