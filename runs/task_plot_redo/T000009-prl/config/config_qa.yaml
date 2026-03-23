@@ -1,0 +1,239 @@
+﻿# ============================================================================
+# QA config (dev + qa)
+# - Used by: python main.py qa --config config/config_qa.yaml
+# - Scope: qa/dev only (no sim section in this file)
+# ============================================================================
+
+# === Subject Form ===========================================================
+subinfo_fields:
+  - name: subject_id
+    type: int
+    constraints:
+      min: 101
+      max: 999
+      digits: 3
+  - name: subname
+    type: string
+  - name: age
+    type: int
+    constraints:
+      min: 5
+      max: 60
+  - name: gender
+    type: choice
+    choices:
+      - Male
+      - Female
+
+# === Subject Mapping ========================================================
+subinfo_mapping:
+  subject_id: 被试号
+  subname: 被试姓名(拼音)
+  age: 年龄
+  gender: 性别
+  Male: 男
+  Female: 女
+  registration_failed: 注册失败。
+  registration_successful: 注册成功！
+  invalid_input: "字段 {field} 输入无效"
+
+# === Display / Window =======================================================
+window:
+  size:
+    - 1920
+    - 1080
+  units: deg
+  screen: 1
+  bg_color: gray
+  fullscreen: true
+  monitor_width_cm: 60
+  monitor_distance_cm: 72
+
+# === Task ===================================================================
+task:
+  task_name: eeg_prl
+  save_path: ./outputs/qa
+  language: Chinese
+  voice_name: zh-CN-YunyangNeural
+  voice_enabled: false
+  total_blocks: 1
+  total_trials: 24
+  trial_per_block: 24
+  conditions:
+    - AB
+    - BA
+  key_list:
+    - f
+    - j
+  left_key: f
+  right_key: j
+  delta: 10
+  seed_mode: same_across_sub
+
+# === Stimuli ================================================================
+stimuli:
+  fixation:
+    type: text
+    text: "+"
+    color: white
+
+  win_feedback:
+    type: text
+    text: "+10分"
+    color: white
+
+  lose_feedback:
+    type: text
+    text: "-10分"
+    color: white
+
+  no_response_feedback:
+    type: text
+    text: "未反应：-10分"
+    color: white
+
+  blank:
+    type: text
+    text: ""
+    color: white
+
+  stima:
+    type: image
+    image: ./assets/nushu_stroke5_000_U1B1A8.png
+    size:
+      - 5
+      - 5
+
+  stimb:
+    type: image
+    image: ./assets/nushu_stroke5_002_U1B1AA.png
+    size:
+      - 5
+      - 5
+
+  highlight_left:
+    type: rect
+    lineColor: white
+    lineWidth: 3
+    fillColor: null
+    pos:
+      - -4
+      - -0.3
+    width: 3
+    height: 4
+
+  highlight_right:
+    type: rect
+    lineColor: white
+    lineWidth: 3
+    fillColor: null
+    pos:
+      - 4
+      - -0.3
+    width: 3
+    height: 4
+
+  block_break:
+    type: text
+    text: |
+      质检分段结束
+      得分：{score} 分
+
+      按【空格键】继续
+    color: white
+    height: 0.78
+
+  instruction_text:
+    type: textbox
+    text: |
+      【PRL 质检模式】
+
+      F键选择左侧图形，J键选择右侧图形。
+      根据反馈持续调整策略。
+
+      按【空格键】开始。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+    units: deg
+    size:
+      - 20
+      - 5
+
+  good_bye:
+    type: text
+    text: |
+      质检完成。
+      最终得分：{total_score} 分
+      按【空格键】退出。
+    color: white
+    font: SimHei
+
+# === Timing =================================================================
+timing:
+  fixation_duration:
+    - 0.6
+    - 0.8
+  choice_duration: 1.5
+  feedback_duration: 0.8
+  blank_duration:
+    - 0.4
+    - 0.6
+
+# === Triggers ===============================================================
+triggers:
+  map:
+    exp_onset: 98
+    exp_end: 99
+    block_onset: 100
+    block_end: 101
+    fixation_onset: 1
+    choice_onset: 2
+    key_press: 3
+    no_response: 4
+    win_feedback_onset: 5
+    lose_feedback_onset: 6
+    no_response_feedback_onset: 7
+
+  driver:
+    type: serial_url
+    url: loop://
+    baudrate: 115200
+    timeout: 1
+    prefix:
+      - 1
+      - 225
+      - 1
+      - 0
+
+  policy:
+    strict: false
+
+  timing:
+    post_delay_s: 0.001
+
+# === Controller =============================================================
+controller:
+  win_prob: 0.8
+  rev_win_prob: 0.9
+  sliding_window: 10
+  sliding_window_hits: 9
+
+# === QA Runtime =============================================================
+qa:
+  output_dir: outputs/qa
+  enable_scaling: true
+  timing_scale: 0.05
+  min_frames: 1
+  strict: false
+  max_wait_s: 10.0
+  acceptance_criteria:
+    required_columns:
+      - condition
+      - choice_onset_trigger
+    expected_trial_count: 24
+    allowed_keys:
+      - f
+      - j
+    triggers_required: true
