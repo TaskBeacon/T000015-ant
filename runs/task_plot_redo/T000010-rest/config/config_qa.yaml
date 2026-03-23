@@ -1,0 +1,192 @@
+# ============================================================================
+# QA config (dev + qa)
+# - Used by: python main.py qa --config config/config_qa.yaml
+# - Scope: qa/dev only (no sim section in this file)
+# - Profile: short smoke run (covers EC and EO once each)
+# ============================================================================
+
+# === Subject Form ===========================================================
+subinfo_fields:
+  - name: subject_id
+    type: int
+    constraints:
+      min: 101
+      max: 999
+      digits: 3
+  - name: subname
+    type: string
+  - name: age
+    type: int
+    constraints:
+      min: 5
+      max: 60
+  - name: gender
+    type: choice
+    choices:
+      - Male
+      - Female
+
+# === Subject Mapping ========================================================
+subinfo_mapping:
+  subject_id: 被试号
+  subname: 被试姓名(拼音)
+  age: 年龄
+  gender: 性别
+  Male: 男
+  Female: 女
+  registration_failed: 注册失败。
+  registration_successful: 注册成功！
+  invalid_input: 字段 {field} 输入无效
+
+# === Display / Window =======================================================
+window:
+  size:
+    - 1920
+    - 1080
+  units: deg
+  screen: 1
+  bg_color: gray
+  fullscreen: true
+  monitor_width_cm: 60
+  monitor_distance_cm: 72
+
+# === Task ===================================================================
+task:
+  task_name: eeg_rest
+  save_path: ./outputs/qa
+  language: Chinese
+  voice_name: zh-CN-YunyangNeural
+  voice_enabled: false
+  total_blocks: 1
+  total_trials: 2
+  trial_per_block: 2
+  conditions:
+    - EC
+    - EO
+  key_list:
+    - space
+  delta: 0.0
+  seed_mode: same_across_sub
+
+# === Stimuli ================================================================
+stimuli:
+  EO_stim:
+    type: text
+    text: "+"
+    color: black
+
+  EC_stim:
+    type: text
+    text: 请闭眼
+    color: black
+
+  general_instruction:
+    type: textbox
+    text: |
+      【静息态任务说明】
+
+      QA模式：仅覆盖核心流程。
+      请按【空格键】开始。
+    color: white
+    pos:
+      - 0
+      - 0
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+    units: deg
+    size:
+      - 20
+      - 5
+
+  EC_instruction:
+    type: textbox
+    text: |
+      请您闭上眼睛。
+      保持静止，直到提示结束。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+    units: deg
+    size:
+      - 20
+      - 5
+
+  EO_instruction:
+    type: textbox
+    text: |
+      请您睁开眼睛。
+      注视中央注视点，直到提示结束。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+    units: deg
+    size:
+      - 20
+      - 5
+
+  good_bye:
+    type: textbox
+    text: |
+      QA结束。
+      请按【空格键】退出。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+    units: deg
+    size:
+      - 20
+      - 5
+
+# === Timing =================================================================
+timing:
+  EO_duration: 1.0
+  EC_duration: 1.0
+
+# === Triggers ===============================================================
+triggers:
+  map:
+    exp_onset: 98
+    exp_end: 99
+    block_onset: 100
+    block_end: 101
+    EC_onset: 10
+    EC_offset: 11
+    EO_onset: 20
+    EO_offset: 21
+
+  driver:
+    type: serial_url
+    url: loop://
+    baudrate: 115200
+    timeout: 1
+    prefix:
+      - 1
+      - 225
+      - 1
+      - 0
+
+  policy:
+    strict: false
+
+  timing:
+    post_delay_s: 0.001
+
+# === QA Runtime =============================================================
+qa:
+  output_dir: outputs/qa
+  enable_scaling: true
+  timing_scale: 0.1
+  min_frames: 1
+  strict: false
+  max_wait_s: 10.0
+  acceptance_criteria:
+    required_columns:
+      - condition
+    expected_trial_count: 2
+    allowed_keys:
+      - space
+    triggers_required: true
