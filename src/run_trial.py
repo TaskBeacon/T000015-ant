@@ -151,18 +151,63 @@ def run_trial(
 
     if response and hit:
         feedback_stim = stim_bank.get("correct_feedback")
+        feedback_stim_id = "correct_feedback"
         feedback_trigger = settings.triggers.get("feedback_correct_response")
     elif response and not hit:
         feedback_stim = stim_bank.get("incorrect_feedback")
+        feedback_stim_id = "incorrect_feedback"
         feedback_trigger = settings.triggers.get("feedback_incorrect_response")
     else:
         feedback_stim = stim_bank.get("no_response_feedback")
+        feedback_stim_id = "no_response_feedback"
         feedback_trigger = settings.triggers.get("feedback_no_response")
 
-    make_unit(unit_label="feedback").add_stim(feedback_stim).show(
+    feedback_unit = make_unit(unit_label="feedback").add_stim(feedback_stim)
+    set_trial_context(
+        feedback_unit,
+        trial_id=trial_id,
+        phase="feedback",
+        deadline_s=settings.feedback_duration,
+        valid_keys=[],
+        block_id=block_id,
+        condition_id=str(condition),
+        task_factors={
+            "condition": str(condition),
+            "stage": "feedback",
+            "cue_type": cue_type,
+            "flanker_type": flanker_type,
+            "target_position": target_position,
+            "target_direction": target_direction,
+            "hit": bool(hit),
+            "response_made": bool(response),
+            "block_idx": block_idx,
+        },
+        stim_id=feedback_stim_id,
+    )
+    feedback_unit.show(
         duration=settings.feedback_duration,
         onset_trigger=feedback_trigger,
     ).to_dict(trial_data)
 
-    make_unit(unit_label="iti").show(duration=settings.iti_duration).to_dict(trial_data)
+    iti_unit = make_unit(unit_label="iti")
+    set_trial_context(
+        iti_unit,
+        trial_id=trial_id,
+        phase="iti",
+        deadline_s=settings.iti_duration,
+        valid_keys=[],
+        block_id=block_id,
+        condition_id=str(condition),
+        task_factors={
+            "condition": str(condition),
+            "stage": "iti",
+            "cue_type": cue_type,
+            "flanker_type": flanker_type,
+            "target_position": target_position,
+            "target_direction": target_direction,
+            "block_idx": block_idx,
+        },
+        stim_id="blank_iti",
+    )
+    iti_unit.show(duration=settings.iti_duration).to_dict(trial_data)
     return trial_data

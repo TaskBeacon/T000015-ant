@@ -2,6 +2,11 @@
 
 All notable development changes for `T000015-ant` are documented here.
 
+## [Unreleased]
+
+### Changed
+- Added explicit trial context metadata for `feedback` and `iti` visible phases.
+
 ## [1.1.2] - 2026-03-02
 
 ### Added
