@@ -7,6 +7,9 @@ All notable development changes for `T000015-ant` are documented here.
 ### Changed
 - Added explicit trial context metadata for `feedback` and `iti` visible phases.
 
+### Removed
+- Removed unused empty `src/utils.py`.
+
 ## [1.1.2] - 2026-03-02
 
 ### Added
